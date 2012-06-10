@@ -1,4 +1,4 @@
-div.scrumbar {
+div.pbbar {
 	float: left;
 	width: 48%;
 	border: 1px dotted gray;
@@ -6,30 +6,30 @@ div.scrumbar {
 	padding: 0;
 }
 
-div.scrumbar span {
+div.pbbar span {
 	float: left;
 	padding: 0.5em 1em;
 	text-align: center;
 }
 
-div.scrumbar span.bar {
+div.pbbar span.bar {
 	padding: 0.5em 0em;
 	background: #d2f5b0;
 }
 
-td.scrumcolumn {
+td.pbcolumn {
 	padding: 4px;
 	vertical-align: top;
 }
 
-td.scrumcolumn hr {
+td.pbcolumn hr {
 	clear: both;
 	border: 0;
 	border-bottom: 1px dotted #aaa;
 	height: 6px;
 }
 
-div.scrumblock {
+div.pbblock {
 	float: left;
 	width: 230px;
 	margin: 4px;
@@ -41,25 +41,25 @@ div.scrumblock {
 	overflow: hidden;
 }
 
-div.scrumblock p {
+div.pbblock p {
 	margin: 3px;
 }
 
-div.scrumblock p.bugid {
+div.pbblock p.bugid {
 	float: left;
 	color: blue;
 }
 
-div.scrumblock p.commits {
+div.pbblock p.commits {
 	float: right;
 	color: black;
 }
 
-div.scrumblock p.category {
+div.pbblock p.category {
 	font-weight: bold;
 }
 
-div.scrumblock p.summary {
+div.pbblock p.summary {
 	clear: both;
 	width: 100%;
 	height: 5em;
@@ -70,28 +70,28 @@ div.scrumblock p.summary {
 	overflow: hidden;
 }
 
-div.scrumblock span.project {
+div.pbblock span.project {
 	font-weight: bold;
 }
 
-div.scrumblock p.priority {
+div.pbblock p.priority {
 	float: left;
 	vertical-align: top;
 }
 
-div.scrumblock p.severity {
+div.pbblock p.severity {
 	float: left;
 	width: 1.2em;
 	height: 1.2em;
 }
 
-div.scrumblock p.resolution {
+div.pbblock p.resolution {
 	float: right;
 	width: 1.2em;
 	height: 1.2em;
 }
 
-div.scrumblock p.handler {
+div.pbblock p.handler {
 	padding-top: 3px;
 }
 

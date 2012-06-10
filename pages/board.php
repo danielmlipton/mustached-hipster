@@ -30,13 +30,13 @@ html_page_top(plugin_lang_get("board"));
 
 <!-- Begin HTML -->
 
-<link rel="stylesheet" type="text/css" href="<?php echo plugin_file("scrumboard.css") ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo plugin_file("pbboard.css") ?>"/>
 
 <br/>
 
 <!-- Begin Project Board table. -->
 
-<table class="width100 scrumboard" align="center" cellspacing="1">
+<table class="width100 pbboard" align="center" cellspacing="1">
 
   <!-- First Row: Controls -->
 
@@ -76,7 +76,7 @@ html_page_top(plugin_lang_get("board"));
 
   <tr>
     <td colspan="<?php echo count($columns) ?>">
-      <div class="scrumbar">
+      <div class="pbbar">
 
 <?php if ($resolved_percent > 50): ?>
 
@@ -92,7 +92,7 @@ html_page_top(plugin_lang_get("board"));
 
 <?php if ($target_version): ?>
 
-      <div class="scrumbar">
+      <div class="pbbar">
 
 <?php if ($timeleft_percent > 50): ?>
 
@@ -129,7 +129,7 @@ html_page_top(plugin_lang_get("board"));
 
   <?php foreach ($columns as $column_title => $custom_field_name): ?>
 
-    <td class="scrumcolumn">
+    <td class="pbcolumn">
 
 <?php if (isset($bugs[ $custom_field_name ]) || plugin_config_get("show_empty_status")): ?>
 
@@ -140,7 +140,7 @@ $rescolor = $rescolors[$bug->resolution];
 
 ?>
 
-      <div class="scrumblock">
+      <div class="pbblock">
         <p class="priority"><?php print_status_icon($bug->priority) ?></p>
         <p class="bugid"></p>
         <p class="commits"><?php echo $source_count[$bug->id] ?></p>
