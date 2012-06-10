@@ -8,7 +8,7 @@
  * @package PB
  * @copyright (C) 2011 John Reese 
  * @copyright (C) 2012 Daniel M. Lipton - daniel@mlipton.com
- * @link http://openclinica.com
+ * @link https://github.com/danielmlipton/mustached-hipster.git
  */
 
 class PB {
