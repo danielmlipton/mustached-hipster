@@ -228,13 +228,11 @@ class PB {
         $t_params[] = self::$_target_version;
       }
 
-      # This block is currently never executed.
-      # TODO - Figure out where this is supposed to be set.
-      if ($t_cagetgory_name) {
-        $t_query .= ' AND b.category_id IN ( ' .
+      if (isset( self::$_category )) {
 
-          # TODO - Figure out where this is supposed to be set.
-          implode( ", ", $t_category_ids ) . ' )';
+        $t_query .= ' AND b.category_id = ' . db_param();
+        $t_params[] = self::$_categories[ self::$_category ];
+
       }
 
       $t_query .= " ORDER BY s.value ASC";
@@ -277,40 +275,9 @@ class PB {
 
   private static function _set_categories () {
 
-    # Fetch list of categories in use for the given projects
-    $t_params = array();
+    foreach (category_get_all_rows( self::$_current_project_id ) as $t_row) {
 
-    $t_query = "SELECT DISTINCT category_id
-              FROM " . self::$_bug_table . "
-              WHERE project_id IN ( " . self::$_cs_project_ids .  " )";
-
-    if (self::$_target_version) {
-
-      $t_query .= " AND target_version=" . db_param();
-      $t_params[] = self::$_target_version;
-
-    }
-
-    $t_result = db_query_bound( $t_query, $t_params );
-
-    self::$_categories = array();
-    $t_category_ids = array();
-
-    while ($t_row = db_fetch_array( $t_result )) {
-
-      if ($t_row["category_id"]) {
-
-        $t_category_id = $t_row[ 'category_id' ];
-        $t_category_ids[] = $t_category_id;
-        $t_category_name = category_full_name( $t_category_id, false );
-
-        if (isset( self::$_categories[ $t_category_name ] )) {
-          self::$_categories[ $t_category_name ][] = $t_category_id;
-        } else {
-          self::$_categories[ $t_category_name ] = array( $t_category_id );
-        }
-
-      }
+      self::$_categories[ $t_row[ 'name' ] ] = $t_row[ 'id' ];
 
     }
 
@@ -320,11 +287,9 @@ class PB {
 
     # Get the selected category
     self::$_category = gpc_get_string( 'category', '' );
-    if (isset( self::$_categories[ self::$_category ] )) {
 
-      # TODO - What does this do?
-      $_category_ids = self::$_categories[ self::$_category ];
-
+    if (isset( self::$_categories[ self::$_category ] ) == FALSE) {
+      self::$_category = NULL;
     }
 
   }
