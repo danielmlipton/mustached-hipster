@@ -1,5 +1,16 @@
 <?php
 
+# PluginBoard - Even agilistas have issues.
+
+/**
+ * PB
+ *
+ * @package PB
+ * @copyright (C) 2011 John Reese 
+ * @copyright (C) 2012 Daniel M. Lipton - daniel@mlipton.com
+ * @link http://openclinica.com
+ */
+
 class PB {
 
   /*
@@ -57,7 +68,6 @@ class PB {
 
   public function get_sevcolors()        { return self::$_sevcolors; }
   public function get_rescolors()        { return self::$_rescolors; }
-  public function get_versions()         { return self::$_versions; }
   public function get_target_version()   { return self::$_target_version; }
   public function get_categories()       { return self::$_categories; }
   public function get_category()         { return self::$_category; }
@@ -68,6 +78,8 @@ class PB {
   public function get_resolved_percent() { return self::$_resolved_percent; }
   public function get_timeleft_string()  { return self::$_timeleft_string; }
   public function get_timeleft_percent() { return self::$_timeleft_percent; }
+
+  public function get_versions() { return array_keys( self::$_versions ); }
 
   /*
    * Mutators
@@ -164,7 +176,7 @@ class PB {
 
     # Get the selected target version
     self::$_target_version = gpc_get_string( "target_version", "" );
-    if (!in_array(self::$_target_version, self::$_versions)) {
+    if (!isset( self::$_versions[ self::$_target_version ] )) {
       self::$_target_version = "";
     }
 
@@ -172,22 +184,11 @@ class PB {
 
   private static function _set_versions() {
 
-    # Fetch list of target versions in use for the given projects
-    $t_query = "SELECT DISTINCT v.version
-              FROM " . self::$_version_table . " v
-                JOIN " . self::$_bug_table . " b
-                  ON b.target_version= v.version
-              WHERE v.project_id IN ( " . self::$_cs_project_ids . " )
-              ORDER BY v.date_order DESC";
 
-    $t_result = db_query_bound( $t_query );
+    foreach (self::$_project_ids as $t_project_id) {
 
-    self::$_versions = array();
-
-    while ($t_row = db_fetch_array( $t_result )) {
-
-      if ($t_row[ 'version' ]) {
-        self::$_versions[] = $t_row[ 'version' ];
+      foreach( version_get_all_rows( $t_project_id ) as $t_row ) {
+        self::$_versions[ $t_row[ 'version' ] ] = 1;
       }
 
     }
