@@ -1,0 +1,17 @@
+<?php
+
+# Copyright (c) 2011 John Reese
+# Licensed under the MIT license
+
+$s_plugin_ProjectBoard_ = '';
+$s_plugin_ProjectBoard_title = 'Project Board';
+$s_plugin_ProjectBoard_description = 'Project board based on status, priority, and target version';
+
+$s_plugin_ProjectBoard_board = 'Project Board';
+$s_plugin_ProjectBoard_all = 'All';
+
+$s_plugin_ProjectBoard_time_weeks = ' weeks left';
+$s_plugin_ProjectBoard_time_days = ' days left';
+$s_plugin_ProjectBoard_time_hours = ' hours left';
+$s_plugin_ProjectBoard_time_up = 'Sprint over';
+
