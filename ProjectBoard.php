@@ -9,6 +9,7 @@ class ProjectBoardPlugin extends MantisPlugin {
     $this->name = plugin_lang_get("title");
     $this->description = plugin_lang_get("description");
 
+    # Not currently used.
     # $this->page = "";
 
     $this->version = "0.1";
@@ -20,13 +21,14 @@ class ProjectBoardPlugin extends MantisPlugin {
 
     );
 
+    # TODO - Do we need to keep this?
     $this->uses = array(
       "Source" => "0.16",
     );
 
     $this->author = "Daniel M. Lipton";
-    $this->contact = "dlipton@openclinica.com";
-    $this->url = "http://openclinica.com";
+    $this->contact = "daniel@mlipton.com";
+    $this->url = "https://github.com/danielmlipton/mustached-hipster.git";
 
   }
 
@@ -35,7 +37,7 @@ class ProjectBoardPlugin extends MantisPlugin {
     return array(
 
       /*
-       * The following numerical values are from: $g_status_enum_string
+       * The following numerical values are the default values from: $g_status_enum_string
        *   10 => new
        *   20 => feedback
        *   30 => acknowledged
@@ -51,7 +53,7 @@ class ProjectBoardPlugin extends MantisPlugin {
       ),
 
       /*
-       * The following numerical values are from: $g_severity_enum_string
+       * The following numerical values are the default values from: $g_severity_enum_string
        *   10 => feature
        *   20 => trivial
        *   30 => text
@@ -102,6 +104,9 @@ class ProjectBoardPlugin extends MantisPlugin {
       # can vary per iteration.  Changing this means changing the data
       # historically.
 
+      # One option would be to store iteration length in the configuration
+      # table in mantis per target version.
+
       # In days.
       "iteration_length" => 30,
 
@@ -117,7 +122,7 @@ class ProjectBoardPlugin extends MantisPlugin {
 
   }
 
-  public function menu($event) {
+  public function menu( $event ) {
 
     $links = array();
     $links[] = '<a href="' . plugin_page("board") . '">' . plugin_lang_get("board") . '</a>';
