@@ -97,8 +97,14 @@ class ProjectBoardPlugin extends MantisPlugin {
         90 => "gray",
       ),
 
-      "iteration_length" => 1209600, # 14 days (14 * 24 * 60 * 60)
-      "show_empty_status" => OFF,
+      # TODO - Find a better way to do this.
+      # I don't like this way of determining iteration length.  Iterations
+      # can vary per iteration.  Changing this means changing the data
+      # historically.
+
+      # In days.
+      "iteration_length" => 30,
+
     );
 
   }

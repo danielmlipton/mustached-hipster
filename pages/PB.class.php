@@ -79,7 +79,7 @@ class PB {
     self::$_board_columns    = plugin_config_get( 'board_columns' );
     self::$_sevcolors        = plugin_config_get( 'board_severity_colors' );
     self::$_rescolors        = plugin_config_get( 'board_resolution_colors' );
-    self::$_iteration_length = plugin_config_get( 'iteration_length' );
+    self::$_iteration_length = plugin_config_get( 'iteration_length' ) * 86400;
 
     self::$_bug_table = db_get_table( 'mantis_bug_table' );
     self::$_custom_field_table = db_get_table(
@@ -123,7 +123,7 @@ class PB {
       $t_time_weeks   = floor( $t_time_diff / 604800 );
 
       self::$_timeleft_percent = min(
-        100, 100 - floor(100 * $time_diff / self::$_iteration_length)
+        100, 100 - floor(100 * $t_time_diff / self::$_iteration_length)
       );
 
       if ($t_time_diff <= 0) {
@@ -305,7 +305,7 @@ class PB {
       foreach ($t_custom_field_ids as $t_custom_field_id) {
 
         # TODO - What does this do?  Why does it work?
-        $t_custom_field_ids[] = $t_custom_field_id;
+        # $t_custom_field_ids[] = $t_custom_field_id;
 
         $t_row = custom_field_get_definition( $t_custom_field_id );
 

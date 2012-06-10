@@ -131,7 +131,7 @@ html_page_top(plugin_lang_get("board"));
 
     <td class="pbcolumn">
 
-<?php if (isset($bugs[ $custom_field_name ]) || plugin_config_get("show_empty_status")): ?>
+<?php if (isset($bugs[ $custom_field_name ])): ?>
 
 <?php if (isset($bugs[$custom_field_name ])) foreach ($bugs[$custom_field_name] as $bug):
 
