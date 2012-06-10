@@ -1,38 +1,37 @@
 <?php
 
-# Copyright (c) 2012 Daniel M. Lipton
-
 class PB {
 
   /*
    * Instance Variables
    */
 
-  private static $board_columns = array();
-  private static $sevcolors = array();
-  private static $rescolors = array();
+  private static $_board_columns    = array();
+  private static $_sevcolors        = array();
+  private static $_rescolors        = array();
+  private static $_iteration_length;
 
-  private static $t_bug_table;
-  private static $t_custom_field_table;
-  private static $t_custom_field_project_table;
-  private static $t_custom_field_string_table;
-  private static $t_version_table;
+  private static $_bug_table;
+  private static $_custom_field_table;
+  private static $_custom_field_project_table;
+  private static $_custom_field_string_table;
+  private static $_version_table;
 
-  private static $cs_project_ids;
-  private static $current_project_id;
-  private static $target_version;
-  private static $category;
-  private static $resolved_count;
-  private static $resolved_percent;
-  private static $bug_count;
-  private static $timeleft_string;
-  private static $timeleft_percent;
+  private static $_cs_project_ids;
+  private static $_current_project_id;
+  private static $_target_version;
+  private static $_category;
+  private static $_resolved_count;
+  private static $_resolved_percent;
+  private static $_bug_count;
+  private static $_timeleft_string;
+  private static $_timeleft_percent;
 
-  private static $bugs = array();
-  private static $project_ids = array();
-  private static $versions = array();
-  private static $categories = array();
-  private static $columns = array();
+  private static $_bugs = array();
+  private static $_project_ids = array();
+  private static $_versions = array();
+  private static $_categories = array();
+  private static $_columns = array();
 
   /*
    * Constructor
@@ -56,57 +55,19 @@ class PB {
    * Accessors
    */
 
-  public function get_sevcolors() {
-    return self::$sevcolors;
-  }
-
-  public function get_rescolors() {
-    return self::$rescolors;
-  }
-
-  public function get_versions() {
-    return self::$versions;
-  }
-
-  public function get_target_version() {
-    return self::$target_version;
-  }
-
-  public function get_categories() {
-    return self::$categories;
-  }
-
-  public function get_category() {
-    return self::$category;
-  }
-
-  public function get_columns() {
-    return self::$columns;
-  }
-
-  public function get_resolved_count() {
-    return self::$resolved_count;
-  }
-
-  public function get_bug_count() {
-    return self::$bug_count;
-  }
-
-  public function get_bugs() {
-    return self::$bugs;
-  }
-
-  public function get_resolved_percent() {
-    return self::$resolved_percent;
-  }
-
-  public function get_timeleft_string() {
-    return self::$timeleft_string;
-  }
-
-  public function get_timeleft_percent() {
-    return self::$timeleft_percent;
-  }
+  public function get_sevcolors()        { return self::$_sevcolors; }
+  public function get_rescolors()        { return self::$_rescolors; }
+  public function get_versions()         { return self::$_versions; }
+  public function get_target_version()   { return self::$_target_version; }
+  public function get_categories()       { return self::$_categories; }
+  public function get_category()         { return self::$_category; }
+  public function get_columns()          { return self::$_columns; }
+  public function get_bug_count()        { return self::$_bug_count; }
+  public function get_bugs()             { return self::$_bugs; }
+  public function get_resolved_count()   { return self::$_resolved_count; }
+  public function get_resolved_percent() { return self::$_resolved_percent; }
+  public function get_timeleft_string()  { return self::$_timeleft_string; }
+  public function get_timeleft_percent() { return self::$_timeleft_percent; }
 
   /*
    * Mutators
@@ -115,21 +76,22 @@ class PB {
 
   private static function _set_config() {
 
-    self::$board_columns = plugin_config_get( 'board_columns' );
-    self::$sevcolors     = plugin_config_get( 'board_severity_colors' );
-    self::$rescolors     = plugin_config_get( 'board_resolution_colors' );
+    self::$_board_columns    = plugin_config_get( 'board_columns' );
+    self::$_sevcolors        = plugin_config_get( 'board_severity_colors' );
+    self::$_rescolors        = plugin_config_get( 'board_resolution_colors' );
+    self::$_iteration_length = plugin_config_get( 'iteration_length' );
 
-    self::$t_bug_table = db_get_table( 'mantis_bug_table' );
-    self::$t_custom_field_table = db_get_table(
+    self::$_bug_table = db_get_table( 'mantis_bug_table' );
+    self::$_custom_field_table = db_get_table(
       'mantis_custom_field_table'
     );
-    self::$t_custom_field_project_table = db_get_table(
+    self::$_custom_field_project_table = db_get_table(
       'mantis_custom_field_project_table'
     );
-    self::$t_custom_field_string_table = db_get_table(
+    self::$_custom_field_string_table = db_get_table(
       'mantis_custom_field_string_table'
     );
-    self::$t_version_table = db_get_table(
+    self::$_version_table = db_get_table(
       'mantis_project_version_table'
     );
 
@@ -137,42 +99,44 @@ class PB {
 
   private static function _set_time_strings() {
 
-    if (self::$target_version) {
+    if (self::$_target_version) {
 
-      foreach (self::$project_ids as $project_id) {
+      foreach (self::$_project_ids as $t_project_id) {
 
-        $version_id = version_get_id(
-          self::$target_version, $project_id, true
+        $t_version_id = version_get_id(
+          self::$_target_version, $t_project_id, true
         );
 
-        if ($version_id !== false) {
+        if ($t_version_id !== false) {
           break;
         }
 
       }
 
-      $version = version_get( $version_id );
-      $version_date = $version->date_order;
-      $now = time();
+      # Is any of this useful to store as instance variables?
+      $t_version      = version_get( $t_version_id );
+      $t_version_date = $t_version->date_order;
+      $t_now          = time();
+      $t_time_diff    = $t_version_date - $t_now;
+      $t_time_hours   = floor( $t_time_diff / 3600 );
+      $t_time_days    = floor( $t_time_diff / 86400 );
+      $t_time_weeks   = floor( $t_time_diff / 604800 );
 
-      $time_diff = $version_date - $now;
-      $time_hours = floor($time_diff / 3600);
-      $time_days = floor($time_diff / 86400);
-      $time_weeks = floor($time_diff / 604800);
-
-      $iteration_length = plugin_config_get("iteration_length");
-      self::$timeleft_percent = min(
-        100, 100 - floor(100 * $time_diff / $iteration_length)
+      self::$_timeleft_percent = min(
+        100, 100 - floor(100 * $time_diff / self::$_iteration_length)
       );
 
-      if ($time_diff <= 0) {
-        self::$timeleft_string = plugin_lang_get("time_up");
-      } else if ($time_weeks > 1) {
-        self::$timeleft_string = $time_weeks . plugin_lang_get("time_weeks");
-      } else if ($time_days > 1) {
-        self::$timeleft_string = $time_days . plugin_lang_get("time_days");
-      } else if ($time_hours > 1) {
-        self::$timeleft_string = $time_hours . plugin_lang_get("time_hours");
+      if ($t_time_diff <= 0) {
+        self::$_timeleft_string = plugin_lang_get( 'time_up' );
+      } else if ($t_time_weeks > 1) {
+        self::$_timeleft_string = $t_time_weeks .
+          plugin_lang_get( 'time_weeks' );
+      } else if ($t_time_days > 1) {
+        self::$_timeleft_string = $t_time_days .
+          plugin_lang_get( 'time_days' );
+      } else if ($t_time_hours > 1) {
+        self::$_timeleft_string = $t_time_hours .
+          plugin_lang_get( 'time_hours' );
       }
 
     }
@@ -182,26 +146,26 @@ class PB {
   private static function _set_project_ids() {
 
     # Get the current project id.
-    self::$current_project_id = helper_get_current_project();
+    self::$_current_project_id = helper_get_current_project();
 
     # Populate the array with all subproject ids.
-    self::$project_ids = current_user_get_all_accessible_subprojects(
-      self::$current_project_id
+    self::$_project_ids = current_user_get_all_accessible_subprojects(
+      self::$_current_project_id
     );
 
     # Then add the current project id.
-    self::$project_ids[] = self::$current_project_id;
+    self::$_project_ids[] = self::$_current_project_id;
 
-    self::$cs_project_ids = implode( ", ", self::$project_ids );
+    self::$_cs_project_ids = implode( ", ", self::$_project_ids );
 
   }
 
   private static function _set_target_version() {
 
     # Get the selected target version
-    self::$target_version = gpc_get_string( "target_version", "" );
-    if (!in_array(self::$target_version, self::$versions)) {
-      self::$target_version = "";
+    self::$_target_version = gpc_get_string( "target_version", "" );
+    if (!in_array(self::$_target_version, self::$_versions)) {
+      self::$_target_version = "";
     }
 
   }
@@ -209,21 +173,21 @@ class PB {
   private static function _set_versions() {
 
     # Fetch list of target versions in use for the given projects
-    $query = "SELECT DISTINCT v.version
-              FROM " . self::$t_version_table . " v
-                JOIN " . self::$t_bug_table . " b
+    $t_query = "SELECT DISTINCT v.version
+              FROM " . self::$_version_table . " v
+                JOIN " . self::$_bug_table . " b
                   ON b.target_version= v.version
-              WHERE v.project_id IN ( " . self::$cs_project_ids . " )
+              WHERE v.project_id IN ( " . self::$_cs_project_ids . " )
               ORDER BY v.date_order DESC";
 
-    $result = db_query_bound($query);
+    $t_result = db_query_bound( $t_query );
 
-    self::$versions = array();
+    self::$_versions = array();
 
-    while ($row = db_fetch_array($result)) {
+    while ($t_row = db_fetch_array( $t_result )) {
 
-      if ($row["version"]) {
-        self::$versions[] = $row["version"];
+      if ($t_row[ 'version' ]) {
+        self::$_versions[] = $t_row[ 'version' ];
       }
 
     }
@@ -232,115 +196,118 @@ class PB {
 
   private static function _set_bugs() {
 
-    $use_source = plugin_is_loaded("Source");
+    # To be quite honest, I don't know what this is used for...
+    $t_use_source = plugin_is_loaded( 'Source' );
 
     # Get the resolve status threshold from Mantis.
-    $resolved_threshold = config_get("bug_resolved_status_threshold");
-    self::$resolved_count = 0;
+    $t_resolved_threshold = config_get( 'bug_resolved_status_threshold' );
+    self::$_resolved_count = 0;
 
-    foreach (self::$columns as $custom_field_name) {
+    foreach (self::$_columns as $t_custom_field_name) {
 
-      $bug_ids = array();
-      $params = array();
-      $bug_ids = array();
+      $t_bug_ids = array();
+      $t_params = array();
+      $t_bug_ids = array();
 
-      $query = "SELECT b.id
-                FROM " . self::$t_bug_table . " b
-                  INNER JOIN " . self::$t_custom_field_project_table . " p
+      $t_query = "SELECT b.id
+                FROM " . self::$_bug_table . " b
+                  INNER JOIN " . self::$_custom_field_project_table . " p
                     ON b.project_id = p.project_id
-                  INNER JOIN " . self::$t_custom_field_table . " f
+                  INNER JOIN " . self::$_custom_field_table . " f
                     ON p.field_id = f.id
-                  LEFT JOIN " . self::$t_custom_field_string_table . " s
+                  LEFT JOIN " . self::$_custom_field_string_table . " s
                     ON  p.field_id=s.field_id
                     AND b.id = s.bug_id
-                WHERE   p.project_id in ( " . self::$cs_project_ids . " )
+                WHERE   p.project_id in ( " . self::$_cs_project_ids . " )
                 AND s.value = " . db_param();
 
-      $params[] = $custom_field_name;
+      $t_params[] = $t_custom_field_name;
 
-      if (self::$target_version) {
-        $query .= " AND b.target_version = " . db_param();
-        $params[] = self::$target_version;
+      if (self::$_target_version) {
+        $t_query .= " AND b.target_version = " . db_param();
+        $t_params[] = self::$_target_version;
       }
 
-      if ($cagetgory_name) {
-        $cs_category_ids = implode( ", ", $category_ids );
-        $query .= " AND b.category_id IN ( $cs_category_ids )";
+      # This block is currently never executed.
+      # TODO - Figure out where this is supposed to be set.
+      if ($t_cagetgory_name) {
+        $t_query .= ' AND b.category_id IN ( ' .
+
+          # TODO - Figure out where this is supposed to be set.
+          implode( ", ", $t_category_ids ) . ' )';
       }
 
-      $query .= " ORDER BY s.value ASC";
+      $t_query .= " ORDER BY s.value ASC";
 
-      $result = db_query_bound( $query, $params );
+      $t_result = db_query_bound( $t_query, $t_params );
 
-      while( $row = db_fetch_array( $result ) ) {
+      while ($t_row = db_fetch_array( $t_result )) {
 
-        self::$bug_count++;
-        $bug_id = $row[ 'id' ];
-        if (bug_is_resolved( $bug_id )) {
-          self::$resolved_count++;
+        self::$_bug_count++;
+        $t_bug_id = $t_row[ 'id' ];
+        if (bug_is_resolved( $t_bug_id )) {
+          self::$_resolved_count++;
         } else {
-          $bug_ids[] = $bug_id;
-          $row = bug_get( $bug_id, TRUE );
+          $t_bug_ids[] = $t_bug_id;
         }
 
 
       }
 
-      foreach ($bug_ids as $bug_id) {
+      foreach ($t_bug_ids as $t_bug_id) {
 
-        $bug = bug_get($bug_id, TRUE);
-        $custom_fields = custom_field_get_all_linked_fields( $bug_id );
-        $bug->{ $custom_field_name } =
-          $custom_fields[ $custom_field_name ][ 'value' ];
+        $t_bug = bug_get( $t_bug_id, TRUE);
+        $t_custom_fields = custom_field_get_all_linked_fields( $t_bug_id );
+        $t_bug->{ $t_custom_field_name } =
+          $t_custom_fields[ $t_custom_field_name ][ 'value' ];
 
-        self::$bugs[ $custom_field_name ][] = $bug;
-        $source_count[$bug_id] = $use_source ?
-          count(SourceChangeset::load_by_bug($bug_id)) : "";
-
+        self::$_bugs[ $t_custom_field_name ][] = $t_bug;
+        $t_source_count[ $t_bug_id] = $t_use_source ?
+          count( SourceChangeset::load_by_bug( $t_bug_id ) ) : "";
 
       }
 
     }
 
     # This needs to be done *after* you get all the bugs.
-    self::$resolved_percent = (self::$bug_count > 0) ?
-      floor(100 * self::$resolved_count / self::$bug_count) : 0;
+    self::$_resolved_percent = (self::$_bug_count > 0) ?
+      floor(100 * self::$_resolved_count / self::$_bug_count) : 0;
 
   }
 
   private static function _set_categories () {
 
     # Fetch list of categories in use for the given projects
-    $params = array();
+    $t_params = array();
 
-    $query = "SELECT DISTINCT category_id
-              FROM " . self::$t_bug_table . "
-              WHERE project_id IN ( " . self::$cs_project_ids .  " )";
+    $t_query = "SELECT DISTINCT category_id
+              FROM " . self::$_bug_table . "
+              WHERE project_id IN ( " . self::$_cs_project_ids .  " )";
 
-    if (self::$target_version) {
+    if (self::$_target_version) {
 
-      $query .= " AND target_version=" . db_param();
-      $params[] = self::$target_version;
+      $t_query .= " AND target_version=" . db_param();
+      $t_params[] = self::$_target_version;
 
     }
 
-    $result = db_query_bound($query, $params);
+    $t_result = db_query_bound( $t_query, $t_params );
 
-    self::$categories = array();
-    $category_ids = array();
+    self::$_categories = array();
+    $t_category_ids = array();
 
-    while ($row = db_fetch_array($result)) {
+    while ($t_row = db_fetch_array( $t_result )) {
 
-      if ($row["category_id"]) {
+      if ($t_row["category_id"]) {
 
-        $category_id = $row["category_id"];
-        $category_ids[] = $category_id;
-        $category_name = category_full_name($category_id, false);
+        $t_category_id = $t_row[ 'category_id' ];
+        $t_category_ids[] = $t_category_id;
+        $t_category_name = category_full_name( $t_category_id, false );
 
-        if (isset(self::$categories[$category_name])) {
-          self::$categories[$category_name][] = $category_id;
+        if (isset( self::$_categories[ $t_category_name ] )) {
+          self::$_categories[ $t_category_name ][] = $t_category_id;
         } else {
-          self::$categories[$category_name] = array($category_id);
+          self::$_categories[ $t_category_name ] = array( $t_category_id );
         }
 
       }
@@ -352,10 +319,11 @@ class PB {
   private static function _set_category() {
 
     # Get the selected category
-    self::$category = gpc_get_string("category", "");
-    if (isset(self::$categories[ self::$category ])) {
+    self::$_category = gpc_get_string( 'category', '' );
+    if (isset( self::$_categories[ self::$_category ] )) {
 
-      $category_ids = self::$categories[ self::$category ];
+      # TODO - What does this do?
+      $_category_ids = self::$_categories[ self::$_category ];
 
     }
 
@@ -363,25 +331,29 @@ class PB {
 
   private static function _set_columns() {
 
-    $custom_field_ids = array();
+    $t_custom_field_ids = array();
 
-    foreach (self::$project_ids as $project_id) {
+    foreach (self::$_project_ids as $t_project_id) {
 
-      $custom_field_ids = custom_field_get_linked_ids( $project_id );
+      $t_custom_field_ids = custom_field_get_linked_ids( $t_project_id );
 
-      foreach ($custom_field_ids as $custom_field_id) {
+      foreach ($t_custom_field_ids as $t_custom_field_id) {
 
-        $custom_field_ids[] = $custom_field_id;
+        # TODO - What does this do?  Why does it work?
+        $t_custom_field_ids[] = $t_custom_field_id;
 
-        $row = custom_field_get_definition( $custom_field_id );
+        $t_row = custom_field_get_definition( $t_custom_field_id );
 
-        foreach (self::$board_columns as $column) {
+        foreach (self::$_board_columns as $t_column) {
 
-          if ($row[ 'name' ] == $column) {
+          if ($t_row[ 'name' ] == $t_column) {
 
-            foreach (explode( "|", $row[ 'possible_values' ]) as $column) {
+            $t_possible_values = explode( "|", $t_row[ 'possible_values' ]);
+            foreach ($t_possible_values as $t_possible_value) {
 
-              if ($column != "") { self::$columns[] = $column; }
+              if ($t_possible_value != "") {
+                self::$_columns[] = $t_possible_value;
+              }
 
             }
 
