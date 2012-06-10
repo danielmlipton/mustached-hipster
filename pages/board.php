@@ -22,6 +22,7 @@ $bug_count        = $pb->get_bug_count();
 $resolved_percent = $pb->get_resolved_percent();
 $timeleft_string  = $pb->get_timeleft_string();
 $timeleft_percent = $pb->get_timeleft_percent();
+$custom_field_id  = $pb->get_custom_field_id();
 
 # Display the page.
 html_page_top(plugin_lang_get("board"));
@@ -29,7 +30,6 @@ html_page_top(plugin_lang_get("board"));
 ?>
 
 <!-- Begin HTML -->
-
 <link rel="stylesheet" type="text/css" href="<?php echo plugin_file("pbboard.css") ?>"/>
 
 <br/>
@@ -115,9 +115,9 @@ html_page_top(plugin_lang_get("board"));
 
   <tr class="row-category">
 
-<?php foreach ($columns as $column_title => $custom_field_name): ?>
+<?php foreach ($columns as $t_column): ?>
 
-    <th><?php echo $custom_field_name ?></th>
+    <th><?php echo $t_column ?></th>
 
 <?php endforeach ?>
 
@@ -125,20 +125,44 @@ html_page_top(plugin_lang_get("board"));
 
   <!-- Fourth Row: Issues in columns -->
 
+<?php foreach(array( 'Expedited', 'Not Expedited' ) as $t_type): ?>
+
+<?php if ($t_type == 'Expedited'): ?>
+
+  <tr>
+    <th colspan="<?php echo count($columns) ?>">
+    Expedited
+    </th>
+  </tr>
+
+<?php else: ?>
+
+  <tr>
+    <th colspan="<?php echo count($columns) ?>">
+    Not Expedited
+    </th>
+  </tr>
+
+<?php endif ?>
+
   <tr class="row-1">
 
-  <?php foreach ($columns as $column_title => $custom_field_name): ?>
+  <?php foreach ($columns as $t_column): ?>
 
     <td class="pbcolumn">
 
-<?php if (isset($bugs[ $custom_field_name ])): ?>
+<?php if (isset($bugs[ $t_column ])): ?>
 
-<?php if (isset($bugs[$custom_field_name ])) foreach ($bugs[$custom_field_name] as $bug):
+<?php if (isset($bugs[ $t_column ])) foreach ($bugs[$t_column] as $bug):
 
 $sevcolor = $sevcolors[$bug->severity];
 $rescolor = $rescolors[$bug->resolution];
 
 ?>
+
+
+<?php if (($t_type == 'Expedited' && $bug->Expedited == TRUE) ||
+  ($t_type != 'Expedited' && $bug->Expedited == FALSE)): ?>
 
       <div class="pbblock">
         <p class="priority"><?php print_status_icon($bug->priority) ?></p>
@@ -161,11 +185,28 @@ $rescolor = $rescolors[$bug->resolution];
 ?>
 
         </p>
-        <p class="summary"><?php echo print_bug_link($bug->id) ?>: <?php echo $bug->summary ?></p>
+        <p class="summary"><?php echo print_bug_link($bug->id) ?>: <?php echo $bug->summary ?>
+      <form action="<?php echo plugin_page("board") ?>" method="get">
+        <input type="hidden" name="page" value="ProjectBoard/board"/>
+        <input type="hidden" name="custom_field_id" value="<?php echo( $custom_field_id ) ?>"/>
+        <input type="hidden" name="bug_id" value="<?php echo( $bug->id ) ?>"/>
+
+        <select name="custom_field_value">
+<?php foreach ($columns as $t_column_name): ?>
+          <option value="<?php echo $t_column_name ?>" <?php if ($t_column == $t_column_name) echo 'selected="selected"' ?>><?php echo $t_column_name ?></option>
+
+<?php endforeach ?>
+
+        </select>
+        <input type="submit" value="Go"/>
+      </form>
+</p>
         <p class="severity" style="background: <?php echo $sevcolor ?>" title="Severity: <?php echo get_enum_element("severity", $bug->severity) ?>"></p>
         <p class="resolution" style="background: <?php echo $rescolor ?>" title="Resolution: <?php echo get_enum_element("resolution", $bug->resolution) ?>"></p>
         <p class="handler"><?php echo $bug->handler_id > 0 ? user_get_name($bug->handler_id) : "" ?></p>
       </div>
+
+<?php endif ?>
 
 <?php endforeach ?>
 
@@ -176,6 +217,9 @@ $rescolor = $rescolors[$bug->resolution];
 <?php endforeach ?>
 
   </tr>
+
+<?php endforeach ?>
+
 </table>
 
 <?php

@@ -20,6 +20,7 @@ div.pbbar span.bar {
 td.pbcolumn {
 	padding: 4px;
 	vertical-align: top;
+        height: 10em;
 }
 
 td.pbcolumn hr {
@@ -30,7 +31,8 @@ td.pbcolumn hr {
 }
 
 div.pbblock {
-	float: left;
+        overflow: auto;
+        width: 100%;
 	width: 230px;
 	margin: 4px;
 

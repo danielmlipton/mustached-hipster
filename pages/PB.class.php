@@ -37,6 +37,8 @@ class PB {
   private static $_bug_count;
   private static $_timeleft_string;
   private static $_timeleft_percent;
+  private static $_custom_field_name;
+  private static $_custom_field_id;
 
   private static $_bugs = array();
   private static $_project_ids = array();
@@ -50,6 +52,7 @@ class PB {
 
   public function __construct() {
 
+    $this->_set_custom_field_value();
     $this->_set_config();
     $this->_set_project_ids();
     $this->_set_versions();
@@ -78,6 +81,7 @@ class PB {
   public function get_resolved_percent() { return self::$_resolved_percent; }
   public function get_timeleft_string()  { return self::$_timeleft_string; }
   public function get_timeleft_percent() { return self::$_timeleft_percent; }
+  public function get_custom_field_id()  { return self::$_custom_field_id; }
 
   public function get_versions() { return array_keys( self::$_versions ); }
 
@@ -204,7 +208,7 @@ class PB {
     $t_resolved_threshold = config_get( 'bug_resolved_status_threshold' );
     self::$_resolved_count = 0;
 
-    foreach (self::$_columns as $t_custom_field_name) {
+    foreach (self::$_columns as $t_column) {
 
       $t_bug_ids = array();
       $t_params = array();
@@ -222,7 +226,7 @@ class PB {
                 WHERE   p.project_id in ( " . self::$_cs_project_ids . " )
                 AND s.value = " . db_param();
 
-      $t_params[] = $t_custom_field_name;
+      $t_params[] = $t_column;
 
       if (self::$_target_version) {
         $t_query .= " AND b.target_version = " . db_param();
@@ -256,11 +260,16 @@ class PB {
       foreach ($t_bug_ids as $t_bug_id) {
 
         $t_bug = bug_get( $t_bug_id, TRUE);
-        $t_custom_fields = custom_field_get_all_linked_fields( $t_bug_id );
-        $t_bug->{ $t_custom_field_name } =
-          $t_custom_fields[ $t_custom_field_name ][ 'value' ];
 
-        self::$_bugs[ $t_custom_field_name ][] = $t_bug;
+        $t_rows = custom_field_get_linked_fields(
+          $t_bug_id, current_user_get_access_level()
+        );
+
+        foreach ($t_rows as $t_row_name => $t_row) {
+          $t_bug->{ $t_row_name } = $t_rows[ $t_row_name ][ 'value' ];
+        }
+
+        self::$_bugs[ $t_column ][] = $t_bug;
         $t_source_count[ $t_bug_id] = $t_use_source ?
           count( SourceChangeset::load_by_bug( $t_bug_id ) ) : "";
 
@@ -295,6 +304,28 @@ class PB {
 
   }
 
+  private static function _set_custom_field_value() {
+
+    # Get the selected category
+    if (gpc_isset( 'custom_field_id' ) &&
+        gpc_isset( 'bug_id' )          &&
+        gpc_isset( 'custom_field_value' )) {
+
+      $t_custom_field_id    = gpc_get_string( 'custom_field_id', '' );
+      $t_bug_id             = gpc_get_string( 'bug_id', '' );
+      $t_custom_field_value = gpc_get_string( 'custom_field_value' );
+
+      custom_field_set_value(
+        $t_custom_field_id,
+        $t_bug_id,
+        $t_custom_field_value,
+        TRUE
+      );
+
+    }
+
+  }
+
   private static function _set_columns() {
 
     $t_custom_field_ids = array();
@@ -304,9 +335,6 @@ class PB {
       $t_custom_field_ids = custom_field_get_linked_ids( $t_project_id );
 
       foreach ($t_custom_field_ids as $t_custom_field_id) {
-
-        # TODO - What does this do?  Why does it work?
-        # $t_custom_field_ids[] = $t_custom_field_id;
 
         $t_row = custom_field_get_definition( $t_custom_field_id );
 
@@ -323,7 +351,10 @@ class PB {
 
             }
 
-            break;
+            self::$_custom_field_name = $t_column;
+            self::$_custom_field_id   = $t_custom_field_id;
+
+            break 3;
 
           }
 
