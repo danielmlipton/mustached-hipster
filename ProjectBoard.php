@@ -10,7 +10,7 @@ class ProjectBoardPlugin extends MantisPlugin {
     $this->description = plugin_lang_get("description");
 
     # Not currently used.
-    # $this->page = "";
+    $this->page = "config_page";
 
     $this->version = "0.1";
     $this->requires = array(
@@ -35,22 +35,6 @@ class ProjectBoardPlugin extends MantisPlugin {
   public function config() {
 
     return array(
-
-      /*
-       * The following numerical values are the default values from: $g_status_enum_string
-       *   10 => new
-       *   20 => feedback
-       *   30 => acknowledged
-       *   40 => confirmed
-       *   50 => assigned
-       *   80 => resolved
-       *   90 => close
-       */
-
-      "board_columns" => array(
-        "Test"   => "Developer Board Column",
-        "Test 2" => "CS Board Column",
-      ),
 
       /*
        * The following numerical values are the default values from: $g_severity_enum_string

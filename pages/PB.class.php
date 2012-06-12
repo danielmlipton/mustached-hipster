@@ -14,10 +14,6 @@
 class PB {
 
   /*
-   * Instance Variables
-   */
-
-  /*
    * Constructor
    */
 
@@ -42,29 +38,8 @@ class PB {
   }
 
   /*
-   * Accessors
-   */
-
-  public function get_sevcolors()        { return $this->_sevcolors; }
-  public function get_rescolors()        { return $this->_rescolors; }
-  public function get_target_version()   { return $this->_target_version; }
-  public function get_categories()       { return $this->_categories; }
-  public function get_category()         { return $this->_category; }
-  public function get_columns()          { return $this->_columns; }
-  public function get_bug_count()        { return $this->_bug_count; }
-  public function get_bugs()             { return $this->_bugs; }
-  public function get_resolved_count()   { return $this->_resolved_count; }
-  public function get_resolved_percent() { return $this->_resolved_percent; }
-  public function get_timeleft_string()  { return $this->_timeleft_string; }
-  public function get_timeleft_percent() { return $this->_timeleft_percent; }
-  public function get_custom_field_id()  { return $this->_custom_field_id; }
-
-  public function get_versions() { return array_keys( $this->_versions ); }
-
-  /*
    * Mutators
    */
-
 
   private function _set_config() {
 

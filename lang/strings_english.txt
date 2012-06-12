@@ -15,3 +15,5 @@ $s_plugin_ProjectBoard_time_days = ' days left';
 $s_plugin_ProjectBoard_time_hours = ' hours left';
 $s_plugin_ProjectBoard_time_up = 'Sprint over';
 
+$s_plugin_ProjectBoard_Configuration = 'Configuration';
+$s_plugin_ProjectBoard_Columns       = 'Columns';

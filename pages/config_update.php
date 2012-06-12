@@ -1,0 +1,12 @@
+<?php
+form_security_validate( 'plugin_ProjectBoard_config_update' );
+
+$f_custom_field_id = gpc_get_int( 'custom_field_id' );
+$f_project_id      = gpc_get_int( 'project_id' );
+
+plugin_config_set(
+  $f_project_id . '_custom_field_id', $f_custom_field_id, 0, $f_project_id
+);
+
+form_security_purge( 'plugin_ProjectBoard_config_update' );
+print_successful_redirect( plugin_page( 'board', true ) );

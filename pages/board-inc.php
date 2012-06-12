@@ -1,3 +1,5 @@
+<?php $t_count = 0 ?>
+
 <!-- Begin Project Board table. -->
 
 <table class="width100 pbboard" align="center" cellspacing="1">
@@ -14,7 +16,7 @@
         <select name="target_version">
           <option value=""><?php echo plugin_lang_get("all") ?></option>
 
-<?php foreach ($this->_versions as $version): ?>
+<?php foreach (array_keys( $this->_versions ) as $version): ?>
 
           <option value="<?php echo string_attribute($version) ?>" <?php if ($version == $this->_target_version) echo 'selected="selected"' ?>><?php echo string_display_line($version) ?></option>
 
