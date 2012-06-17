@@ -1,12 +1,12 @@
 <?php $t_count = 0 ?>
-<div class="foobarbaz"></div>
+
 <!-- Begin Project Board table. -->
 
 <!-- First Row: Controls -->
 
 <div class="container">
 
-<?php echo plugin_lang_get("board") ?>
+<strong><?php echo project_get_name( $this->_project_id ) ?></strong>
 
   <form action="<?php echo plugin_page("board") ?>" method="get">
     <input type="hidden" name="page" value="ProjectBoard/board"/>
@@ -90,8 +90,16 @@
   </div>
 </div>
 
-<div class="foo">
-<div class="bar">
+<div class="rightcontainer">
+
+<div class="leftcontainer">
+
+  <!--
+  <div class="column" id="<?php echo ++$t_count ?>">
+  Not on board.
+  </div>
+  -->
+
   <?php foreach ($this->_columns as $t_column): ?>
 
   <div class="column" id="<?php echo ++$t_count ?>">
@@ -192,11 +200,20 @@
 
   <?php endforeach ?>
 
+  <!--
+  <div class="done-hidden">
+  Done.
+  </div>
+  -->
+
 </div> <!-- End of "container" -->
 </div>
 
 <br clear="all" />
 
 <?php endforeach ?>
+
+<p />
+
 
 

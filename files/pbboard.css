@@ -4,15 +4,28 @@
   display: inline-block;
 }
 
-div.foo {
+
+div.rightcontainer {
   float: right;
   position: relative;
   left: -50%
 }
 
-div.bar {
+div.leftcontainer {
   left: 50%;
   position: relative;
+}
+
+.done-hidden {
+  float: left;
+}
+
+.done-visible {
+  padding: .5em;
+  float: left;
+  width: 15.7em;
+  min-height: 14.1em;
+  border: .5em solid #DDD;
 }
 
 /* Neither the width or the height on the columns is right. */

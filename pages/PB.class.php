@@ -123,11 +123,13 @@ class PB {
 
   private function _set_bugs() {
 
+    # TODO: This is not currently used.
     # To be quite honest, I don't know what this is used for...
-    $t_use_source = plugin_is_loaded( 'Source' );
+    # $t_use_source = plugin_is_loaded( 'Source' );
 
+    # TODO: This is not currently used.
     # Get the resolve status threshold from Mantis.
-    $t_resolved_threshold = config_get( 'bug_resolved_status_threshold' );
+    # $t_resolved_threshold = config_get( 'bug_resolved_status_threshold' );
     $this->_resolved_count = 0;
 
     foreach ($this->_columns as $t_column) {
@@ -196,7 +198,7 @@ class PB {
 
         $this->_bugs[ $t_column ][] = $t_bug;
 
-        # Not currently implemented.
+        # TODO: This is not currently used.
         # $t_source_count[ $t_bug_id] = $t_use_source ?
         #  count( SourceChangeset::load_by_bug( $t_bug_id ) ) : "";
 
@@ -227,29 +229,6 @@ class PB {
 
     if (isset( $this->_categories[ $this->_category ] ) == FALSE) {
       $this->_category = NULL;
-    }
-
-  }
-
-  # No longer used.
-  private function _set_custom_field_value() {
-
-    # Get the selected category
-    if (gpc_isset( 'custom_field_id' ) &&
-        gpc_isset( 'bug_id' )          &&
-        gpc_isset( 'custom_field_value' )) {
-
-      $t_columns_id         = gpc_get_string( 'custom_field_id', '' );
-      $t_bug_id             = gpc_get_string( 'bug_id', '' );
-      $t_custom_field_value = gpc_get_string( 'custom_field_value' );
-
-      custom_field_set_value(
-        $t_custom_field_id,
-        $t_bug_id,
-        $t_custom_field_value,
-        TRUE
-      );
-
     }
 
   }
