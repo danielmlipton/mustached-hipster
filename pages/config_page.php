@@ -2,12 +2,16 @@
 
 html_page_top( plugin_lang_get( 'title' ) . " Configuration" );
 
-$t_project_id      = helper_get_current_project();
+$t_project_id = helper_get_current_project();
+$t_columns_id = 'columns_custom_field_id';
+$t_rows_id    = 'rows_custom_field_id';
 
-$t_config_option   = $t_project_id . '_custom_field_id';
+if (config_is_set( 'plugin_ProjectBoard_' . $t_columns_id )) {
+  $t_current_columns_id = plugin_config_get( $t_columns_id );
+}
 
-if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
-  $t_custom_field_id = plugin_config_get( $t_config_option );
+if (config_is_set( 'plugin_ProjectBoard_' . $t_rows_id )) {
+  $t_current_rows_id = plugin_config_get( $t_rows_id );
 }
 
 ?>
@@ -29,8 +33,12 @@ if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
   </tr>
 
   <tr <?php echo helper_alternate_class() ?>>
-    <td class="category">
+    <td class="category" style="width: 35%;">
       <?php echo plugin_lang_get( 'Columns' ) ?>
+      <br />
+      <span style="font-weight: normal;">
+      <?php echo plugin_lang_get( 'config_columns_help' ) ?>
+      </span>
     </td>
     <td>
 
@@ -39,7 +47,7 @@ if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
 <?php $t_row = custom_field_get_definition( $t_custom_field_id ); ?>
 
       <div style="float: left;">
-        <input type="radio" name="custom_field_id" value="<?php echo $t_row[ 'id' ] ?>"<?php $t_row[ 'id' ] == $t_custom_field_id ? ' checked' : '' ?> />
+        <input type="radio" name="columns_id" value="<?php echo $t_row[ 'id' ] ?>"<?php if ($t_row[ 'id' ] == $t_current_columns_id) { echo( ' checked="checked"' ); } ?> />
       </div>
 
       <div style="float:left;">
@@ -48,7 +56,7 @@ if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
         <small>
         <i>
         "<?php echo $t_row[ 'possible_values' ] ?>"
-        "<?php echo $t_row[ 'id' ] ?>"
+
         </i>
         </small>
       </div>
@@ -56,6 +64,44 @@ if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
       <br clear="all" />
 
 <?php endforeach ?>
+
+    </td>
+  </tr>
+
+  <tr <?php echo helper_alternate_class() ?>>
+    <td class="category" style="width: 35%;">
+      <?php echo plugin_lang_get( 'Rows' ) ?>
+      <br />
+      <span style="font-weight: normal;">
+      <?php echo plugin_lang_get( 'config_rows_help' ) ?>
+      </span>
+    </td>
+    <td>
+
+
+<?php foreach (custom_field_get_linked_ids( $t_project_id ) as $t_custom_field_id): ?>
+
+<?php $t_row = custom_field_get_definition( $t_custom_field_id ); ?>
+
+      <div style="float: left;">
+        <input type="radio" name="rows_id" value="<?php echo $t_row[ 'id' ] ?>"<?php if ($t_row[ 'id' ] == $t_current_rows_id) { echo( ' checked="checked"' ); } ?> />
+      </div>
+
+      <div style="float:left;">
+        <?php echo $t_row[ 'name' ] ?>
+        <br />
+        <small>
+        <i>
+        "<?php echo $t_row[ 'possible_values' ] ?>"
+        </i>
+        </small>
+      </div>
+
+      <br clear="all" />
+
+<?php endforeach ?>
+
+      <br clear="all" />
 
     </td>
   </tr>

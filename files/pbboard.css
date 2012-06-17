@@ -1,3 +1,104 @@
+.container {
+  width: 100%;
+  padding: 0px;
+  display: inline-block;
+}
+
+div.foo {
+  float: right;
+  position: relative;
+  left: -50%
+}
+
+div.bar {
+  left: 50%;
+  position: relative;
+}
+
+/* Neither the width or the height on the columns is right. */
+.column {
+  padding: .5em;
+  float: left;
+  width: 15.7em;
+  min-height: 14.1em;
+  border: .5em solid #DDD;
+}
+
+/* The width is also not right here. */
+.column-header {
+  padding: 0px;
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  color: #555
+}
+
+.sub-header {
+  text-align: center;
+  padding: 0.3em;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.portlet {
+width: 200px;
+margin-top: .5em;
+margin-bottom: .5em;
+}
+
+.portlet-not-saved {
+  border: 1px dotted red;
+}
+
+input.button-not-saved {
+  visibility: visible;
+}
+
+input.button-saved {
+  visibility: hidden;
+}
+
+input.button {
+  border: 0px;
+  font-size: 9px;
+  padding: 1px;
+  background: white;
+  text-decoration: underline;
+  color: red;
+}
+
+input.button:hover,input.button.activate {
+  color: green;
+}
+
+.portlet-header {
+  margin: 0.3em;
+  padding-bottom: 4px;
+  padding-left: 0.2em;
+  height: 1.7em;
+  overflow: hidden;
+}
+
+.portlet-header .ui-icon {
+  float: right;
+}
+
+.portlet-content {
+  margin: 0.3em;
+  padding: 0px;
+  height: 6.3em;
+}
+
+.ui-sortable-placeholder {
+  border: 1px dotted black;
+  visibility: visible !important;
+  height: auto;
+}
+
+.ui-sortable-placeholder * {
+  visibility: hidden;
+}
+
 
 div.pbbar {
 	float: left;
@@ -5,6 +106,8 @@ div.pbbar {
 	border: 1px dotted gray;
 	margin-right: 1em;
 	padding: 0;
+        margin-top: 1em;
+        margin-bottom: 1em;
 }
 
 div.pbbar span {
@@ -18,89 +121,67 @@ div.pbbar span.bar {
 	background: #d2f5b0;
 }
 
-table.pbboard {
-  table-layout: fixed;
-}
-
-td.pbcolumn {
-	padding: 4px;
-	vertical-align: top;
-        height: 10em;
-}
-
-td.pbcolumn hr {
-	clear: both;
-	border: 0;
-	border-bottom: 1px dotted #aaa;
-	height: 6px;
-}
-
-div.pbblock {
-        overflow: auto;
-        width: 100%;
-	width: 90%;
-	margin: 4px;
-        margin-left:auto;
-        margin-right:auto;
-
-	background: #FAF3AA;
-	border: 1px solid black;
-
-	text-align: center;
-	overflow: hidden;
-}
-
-div.pbblock p {
-	margin: 3px;
-}
-
-div.pbblock p.bugid {
+p.bugid {
 	float: left;
 	color: blue;
 }
 
-div.pbblock p.commits {
+p.commits {
 	float: right;
 	color: black;
 }
 
-div.pbblock p.category {
+div.category {
 	font-weight: bold;
+	text-align: center;
 }
 
-div.pbblock p.summary {
+div.summary {
 	clear: both;
 	width: 100%;
-	height: 5em;
-	border-top: 1px solid #e7df8a;
-	border-bottom: 1px solid #e7df8a;
-	padding-top: 3px;
+	height: 4.5em;
+	border-top: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
 	text-align: left;
 	overflow: hidden;
+padding-left: 0px;
+padding-top: 3px;
+padding-bottom: 3px;
+margin-bottom: 6px;
 }
 
-div.pbblock span.project {
+span.project {
 	font-weight: bold;
 }
 
-div.pbblock p.priority {
+div.priority {
 	float: left;
 	vertical-align: top;
 }
 
-div.pbblock p.severity {
+div.severity {
 	float: left;
 	width: 1.2em;
 	height: 1.2em;
 }
 
-div.pbblock p.resolution {
+div.resolution {
 	float: right;
 	width: 1.2em;
 	height: 1.2em;
 }
 
-div.pbblock p.handler {
-	padding-top: 3px;
+div.handler {
+        text-align: center;
+        float: left;
+	width: 100%;
+margin: 0px;
+padding: 0px;
+}
+
+div.save {
+  float: right;
+padding: 0px;
+
 }
 

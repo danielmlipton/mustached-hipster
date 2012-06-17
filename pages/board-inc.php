@@ -1,192 +1,202 @@
 <?php $t_count = 0 ?>
-
+<div class="foobarbaz"></div>
 <!-- Begin Project Board table. -->
 
-<table class="width100 pbboard" align="center" cellspacing="1">
+<!-- First Row: Controls -->
 
-  <!-- First Row: Controls -->
-
-  <tr>
-    <td class="form-title" colspan="<?php echo count($this->_columns) ?>">
+<div class="container">
 
 <?php echo plugin_lang_get("board") ?>
 
-      <form action="<?php echo plugin_page("board") ?>" method="get">
-        <input type="hidden" name="page" value="ProjectBoard/board"/>
-        <select name="target_version">
-          <option value=""><?php echo plugin_lang_get("all") ?></option>
+  <form action="<?php echo plugin_page("board") ?>" method="get">
+    <input type="hidden" name="page" value="ProjectBoard/board"/>
+    <select name="target_version">
+      <option value=""><?php echo plugin_lang_get("all") ?></option>
 
-<?php foreach (array_keys( $this->_versions ) as $version): ?>
+      <?php foreach (array_keys( $this->_versions ) as $version): ?>
 
-          <option value="<?php echo string_attribute($version) ?>" <?php if ($version == $this->_target_version) echo 'selected="selected"' ?>><?php echo string_display_line($version) ?></option>
+      <option value="<?php echo string_attribute($version) ?>"
+       <?php if ($version == $this->_target_version)
+         echo 'selected="selected"'
+       ?>><?php echo string_display_line($version) ?></option>
 
-<?php endforeach ?>
+      <?php endforeach ?>
 
-        </select>
-        <select name="category">
-          <option value=""><?php echo plugin_lang_get("all") ?></option>
+    </select>
+    <select name="category">
+      <option value=""><?php echo plugin_lang_get("all") ?></option>
 
-<?php foreach (array_keys($this->_categories) as $this->_category_name): ?>
+      <?php foreach (array_keys($this->_categories) as $t_category): ?>
 
-          <option value="<?php echo $this->_category_name ?>" <?php if ($this->_category == $this->_category_name) echo 'selected="selected"' ?>><?php echo $this->_category_name ?></option>
+      <option value="<?php echo $t_category ?>"
+      <?php if ($this->_category == $t_category) echo 'selected="selected"' ?>>
+      <?php echo $t_category ?>
+      </option>
 
-<?php endforeach ?>
+      <?php endforeach ?>
 
-        </select>
-        <input type="submit" value="Go"/>
-      </form>
-    </td>
-  </tr>
+    </select>
+    <input type="submit" value="go" />
+  </form>
 
-  <!-- Second Row: Progress Bar -->
+</div>
 
-  <tr>
-    <td colspan="<?php echo count($this->_columns) ?>">
-      <div class="pbbar">
+<!-- Second Row: Progress Bar -->
 
-<?php if ($this->_resolved_percent > 50): ?>
+<div class="container">
 
-        <span class="bar" style="width: <?php echo $this->_resolved_percent ?>%"><?php echo "{$this->_resolved_count}/{$this->_bug_count} ({$this->_resolved_percent}%)" ?></span>
+  <div class="pbbar">
 
-<?php else: ?>
+    <?php if ($this->_resolved_percent > 50): ?>
 
-        <span class="bar" style="width: <?php echo $this->_resolved_percent ?>%">&nbsp;</span><span><?php echo "{$this->_resolved_count}/{$this->_bug_count} ({$this->_resolved_percent}%)" ?></span>
+    <span class="bar" style="width: <?php echo $this->_resolved_percent ?>%;"><?php echo "{$this->_resolved_count}/{$this->_bug_count} ({$this->_resolved_percent}%)" ?></span>
 
-<?php endif ?>
+    <?php else: ?>
 
-      </div>
+    <span class="bar" style="width: <?php echo $this->_resolved_percent ?>%;">&nbsp;</span><span><?php echo "{$this->_resolved_count}/{$this->_bug_count} ({$this->_resolved_percent}%)" ?></span>
 
-<?php if ($this->_target_version): ?>
+    <?php endif ?>
 
-      <div class="pbbar">
+  </div>
 
-<?php if ($this->_timeleft_percent > 50): ?>
 
-        <span class="bar" style="width: <?php echo $this->_timeleft_percent ?>%"><?php echo $this->_timeleft_string ?></span>
+  <?php if ($this->_target_version): ?>
 
-<?php else: ?>
+  <div class="pbbar">
 
-        <span class="bar" style="width: <?php echo $this->_timeleft_percent ?>%">&nbsp;</span><span><?php echo $this->_timeleft_string ?></span>
+    <?php if ($this->_timeleft_percent > 50): ?>
 
-<?php endif ?>
+    <span class="bar" style="width: <?php echo $this->_timeleft_percent ?>%"><?php echo $this->_timeleft_string ?></span>
 
-      </div>
+    <?php else: ?>
 
-<?php endif ?>
+    <span class="bar" style="width: <?php echo $this->_timeleft_percent ?>%">&nbsp;<?php echo $this->_timeleft_string ?></span>
 
-    </td>
-  </tr>
+    <?php endif ?>
 
-<!-- Third row:  Column Titles -->
+  </div>
 
-  <tr class="row-category">
+  <?php endif ?>
 
-<?php foreach ($this->_columns as $t_column): ?>
+</div>
 
-    <th><?php echo $t_column ?></th>
+<!-- Third Row: Issues in columns -->
 
-<?php endforeach ?>
+<?php foreach(array_keys( $this->_rows ) as $t_row_name ): ?>
 
-  </tr>
+<div class="container">
+  <div class="sub-header">
+    <?php echo $t_row_name ?>
+  </div>
+</div>
 
-  <!-- Fourth Row: Issues in columns -->
-
-<?php foreach(array( 'Expedited', 'Not Expedited' ) as $t_type): ?>
-
-<?php if ($t_type == 'Expedited'): ?>
-
-  <tr>
-    <th colspan="<?php echo count($this->_columns) ?>">
-    Expedited
-    </th>
-  </tr>
-
-<?php else: ?>
-
-  <tr>
-    <th colspan="<?php echo count($this->_columns) ?>">
-    Not Expedited
-    </th>
-  </tr>
-
-<?php endif ?>
-
-  <tr class="row-1">
-
+<div class="foo">
+<div class="bar">
   <?php foreach ($this->_columns as $t_column): ?>
 
-    <td class="pbcolumn">
+  <div class="column" id="<?php echo ++$t_count ?>">
 
-<?php if (isset($this->_bugs[ $t_column ])): ?>
+<script type="text/javascript">
+  jQuery( '#<?php echo( $t_count ) ?>.column' ).data(
+    'table_info', {
+      'current_column': '<?php echo $t_column ?>',
+      'current_row': '<?php echo $t_row_name ?>',
+    }
+  );
+</script>
+    <div class="column-header"><?php echo $t_column ?></div>
 
-<?php if (isset($this->_bugs[ $t_column ])) foreach ($this->_bugs[$t_column] as $bug):
+    <?php if (isset($this->_bugs[ $t_column ])): ?>
 
-$sevcolor = $this->_sevcolors[$bug->severity];
-$rescolor = $this->_rescolors[$bug->resolution];
+    <?php if (isset($this->_bugs[ $t_column ])) foreach ($this->_bugs[$t_column] as $bug):
 
-?>
+      $sevcolor = $this->_sevcolors[$bug->severity];
+      $rescolor = $this->_rescolors[$bug->resolution];
 
+    ?>
 
-<?php if (($t_type == 'Expedited' && $bug->Expedited == TRUE) ||
-  ($t_type != 'Expedited' && $bug->Expedited == FALSE)): ?>
+    <?php if ($bug->column_name == $t_column && $bug->row_name == $t_row_name ) :?>
+    <div class="portlet">
 
-      <div class="pbblock">
-        <p class="priority"><?php print_status_icon($bug->priority) ?></p>
-        <p class="bugid"></p>
-        <p class="commits"><?php echo $source_count[$bug->id] ?></p>
-        <p class="category">
+      <div class="portlet-header">
 
-<?php
+        <div class="priority" style="float: left;">
+          <?php print_status_icon($bug->priority) ?>
+        </div>
 
-  if ($bug->project_id != $current_project) {
+        <div class="commits" style="float: right;">
+          <?php echo $source_count[$bug->id] ?>
+        </div>
 
-    $project_name = project_get_name($bug->project_id);
+        <div class="category">
+          <?php if ($bug->project_id != $current_project) {
+              $project_name = project_get_name($bug->project_id);
+              echo "<span class=\"project\">{$project_name}</span> - ";
+            }
+            echo category_full_name($bug->category_id, false)
+          ?>
 
-    echo "<span class=\"project\">{$project_name}</span> - ";
+        </div>
 
-  }
-
-  echo category_full_name($bug->category_id, false)
-
-?>
-
-        </p>
-        <p class="summary"><?php echo print_bug_link($bug->id) ?>: <?php echo $bug->summary ?>
-      <form action="<?php echo plugin_page("board") ?>" method="get">
-        <input type="hidden" name="page" value="ProjectBoard/board"/>
-        <input type="hidden" name="custom_field_id" value="<?php echo( $this->_custom_field_id ) ?>"/>
-        <input type="hidden" name="bug_id" value="<?php echo( $bug->id ) ?>"/>
-
-        <select name="custom_field_value">
-          <option value="">None</option>
-<?php foreach ($this->_columns as $t_column_name): ?>
-          <option value="<?php echo $t_column_name ?>" <?php if ($t_column == $t_column_name) echo 'selected="selected"' ?>><?php echo $t_column_name ?></option>
-
-<?php endforeach ?>
-
-        </select>
-        <input type="submit" value="Go"/>
-      </form>
-</p>
-        <p class="severity" style="background: <?php echo $sevcolor ?>" title="Severity: <?php echo get_enum_element("severity", $bug->severity) ?>"></p>
-        <p class="resolution" style="background: <?php echo $rescolor ?>" title="Resolution: <?php echo get_enum_element("resolution", $bug->resolution) ?>"></p>
-        <p class="handler"><?php echo $bug->handler_id > 0 ? user_get_name($bug->handler_id) : "" ?></p>
       </div>
 
-<?php endif ?>
+      <div class="portlet-content">
+        <div class="summary">
+          <?php echo print_bug_link($bug->id) ?>:
+          <?php echo $bug->summary ?>
+        </div>
+
+        <div class="handler">
+        <?php
+          echo $bug->handler_id > 0 ? user_get_name($bug->handler_id) : ""
+        ?>
+
+          <div class="severity" style="background: <?php echo $sevcolor ?>"
+            title="Severity: <?php echo get_enum_element("severity", $bug->severity) ?>">
+          </div>
+
+          <div class="resolution" style="background: <?php echo $rescolor ?>"
+            title="Resolution: <?php echo get_enum_element("resolution", $bug->resolution) ?>">
+          </div>
+
+          <div class="save">
+
+              <input id="<?php echo ++$t_count ?>" class="button-saved button" name="button" type="submit" value="not saved" title="Click here to save." />
+
+<script type="text/javascript">
+  jQuery( '.save, #<?php echo( $t_count ) ?>' ).data(
+    'portlet', {
+    current_column_name: '<?php echo $t_column ?>',
+    current_row_name   : '<?php echo $t_row_name ?>',
+    columns_id         : '<?php echo( $this->_columns_id ) ?>',
+    rows_id            : '<?php echo( $this->_rows_id ) ?>',
+    bug_id             : '<?php echo( $bug->id ) ?>',
+  });
+</script>
+
+          </div> <!-- End of "save" -->
+
+        </div> <!-- End of "handler" -->
+
+      </div> <!-- End of "portlet-content" -->
+
+    </div> <!-- End of "portlet" -->
+
+    <?php endif ?>
+
+    <?php endforeach ?>
+
+    <?php endif ?>
+
+  </div> <!-- End of "column" -->
+
+  <?php endforeach ?>
+
+</div> <!-- End of "container" -->
+</div>
+
+<br clear="all" />
 
 <?php endforeach ?>
 
-<?php endif ?>
 
-    </td>
-
-<?php endforeach ?>
-
-  </tr>
-
-<?php endforeach ?>
-
-</table>
-
-<p>

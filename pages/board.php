@@ -14,8 +14,15 @@ html_page_top(plugin_lang_get("board"));
 <!-- Begin HTML -->
 
 <link rel="stylesheet" type="text/css" href="<?php echo plugin_file("pbboard.css") ?>"/>
+<script type="text/javascript">
+  var g_token_name  = 'plugin_ProjectBoard_ajax_update_token';
+  var g_token_value = '<?php echo form_security_token( "plugin_ProjectBoard_ajax_update" ) ?>';
+  var g_page = '<?php echo plugin_page( "ajax_update" ) ?>';
+  var g_current_column, g_current_row;
+</script>
+<script type="text/javascript" src="<?php echo plugin_file( 'pbboard.js' ) ?>"></script>
 
-<br/>
+<br />
 
 <?php
 
@@ -36,18 +43,31 @@ foreach ($t_project_ids as $t_project_id) {
 #  Not sure if it makes sense to have boards across different projects.
 #  current_user_get_all_accessible_subprojects( $t_project_id )
 
-  $t_config_option = $t_project_id . '_custom_field_id';
+  $t_columns_option = 'columns_custom_field_id';
+  $t_rows_option    = 'rows_custom_field_id';
 
-  if (config_is_set( 'plugin_ProjectBoard_' . $t_config_option )) {
+  if (config_is_set( 'plugin_ProjectBoard_' . $t_columns_option )) {
 
-    $t_custom_field_id = plugin_config_get( $t_config_option );
-    $t_pb = new PB( $t_project_id, $t_custom_field_id );
+    $t_columns_id = plugin_config_get( $t_columns_option );
+
+  }
+
+  if (config_is_set( 'plugin_ProjectBoard_' . $t_rows_option )) {
+
+    $t_rows_id = plugin_config_get( $t_rows_option );
+
+  }
+
+  if (isset( $t_columns_id ) && isset( $t_rows_id )) {
+
+    $t_pb = new PB( $t_project_id, $t_columns_id, $t_rows_id );
 
   } else {
 
     print_successful_redirect( plugin_page( 'config_page', true ) );
 
   }  
+
 
 }
 

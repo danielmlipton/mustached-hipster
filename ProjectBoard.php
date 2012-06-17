@@ -18,7 +18,8 @@ class ProjectBoardPlugin extends MantisPlugin {
       # This has not been tested with anything other than Mantis 1.2.8
       # and above.
       "MantisCore" => "1.2.8",
-
+      "jQuery" => "1.4.2",
+      "jQueryUI" => "1.8.14",
     );
 
     # TODO - Do we need to keep this?

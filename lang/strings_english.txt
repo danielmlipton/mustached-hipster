@@ -17,3 +17,10 @@ $s_plugin_ProjectBoard_time_up = 'Sprint over';
 
 $s_plugin_ProjectBoard_Configuration = 'Configuration';
 $s_plugin_ProjectBoard_Columns       = 'Columns';
+$s_plugin_ProjectBoard_config_columns_help = <<<EOT
+Select the custom field that corresponds to the columns of this project board.
+EOT;
+$s_plugin_ProjectBoard_Rows     = 'Rows';
+$s_plugin_ProjectBoard_config_rows_help = <<<EOT
+Select the custom field that corresponds to the rows of this project board.
+EOT;

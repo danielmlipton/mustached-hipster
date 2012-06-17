@@ -17,17 +17,18 @@ class PB {
    * Constructor
    */
 
-  public function __construct( $p_project_id, $p_custom_field_id ) {
+  public function __construct( $p_project_id, $p_columns_id, $p_rows_id ) {
 
     $this->_project_id = $p_project_id;
-    $this->_custom_field_id = $p_custom_field_id;
+    $this->_columns_id = $p_columns_id;
+    $this->_rows_id    = $p_rows_id;
 
-    $this->_set_custom_field_value();
     $this->_set_config();
     $this->_set_versions();
     $this->_set_target_version();
     $this->_set_categories();
     $this->_set_category();
+    $this->_set_rows();
     $this->_set_columns();
     $this->_set_bugs();
     $this->_set_time_strings();
@@ -176,20 +177,22 @@ class PB {
           $t_bug_ids[] = $t_bug_id;
         }
 
-
       }
 
       foreach ($t_bug_ids as $t_bug_id) {
 
         $t_bug = bug_get( $t_bug_id, TRUE);
 
-        $t_rows = custom_field_get_linked_fields(
-          $t_bug_id, current_user_get_access_level()
+        $t_columns_value = custom_field_get_value(
+          $this->_columns_id, $t_bug_id
         );
 
-        foreach ($t_rows as $t_row_name => $t_row) {
-          $t_bug->{ $t_row_name } = $t_rows[ $t_row_name ][ 'value' ];
-        }
+        $t_rows_value = custom_field_get_value(
+          $this->_rows_id, $t_bug_id
+        );
+
+        $t_bug->column_name = $t_columns_value;
+        $t_bug->row_name    = $t_rows_value;
 
         $this->_bugs[ $t_column ][] = $t_bug;
 
@@ -228,6 +231,7 @@ class PB {
 
   }
 
+  # No longer used.
   private function _set_custom_field_value() {
 
     # Get the selected category
@@ -235,7 +239,7 @@ class PB {
         gpc_isset( 'bug_id' )          &&
         gpc_isset( 'custom_field_value' )) {
 
-      $t_custom_field_id    = gpc_get_string( 'custom_field_id', '' );
+      $t_columns_id         = gpc_get_string( 'custom_field_id', '' );
       $t_bug_id             = gpc_get_string( 'bug_id', '' );
       $t_custom_field_value = gpc_get_string( 'custom_field_value' );
 
@@ -252,9 +256,7 @@ class PB {
 
   private function _set_columns() {
 
-    $t_custom_field_ids = array();
-
-    $t_row = custom_field_get_definition( $this->_custom_field_id );
+    $t_row = custom_field_get_definition( $this->_columns_id );
 
     $t_possible_values = explode( "|", $t_row[ 'possible_values' ]);
 
@@ -264,6 +266,21 @@ class PB {
         $this->_columns[] = $t_possible_value;
       }
 
+    }
+
+  }
+
+  private function _set_rows() {
+
+
+    $t_row = custom_field_get_definition( $this->_rows_id );
+
+    $t_possible_values = explode( "|", $t_row[ 'possible_values' ]);
+
+    foreach ($t_possible_values as $t_possible_value) {
+      if (!empty( $t_possible_value )) {
+        $this->_rows[ $t_possible_value ] = $t_rows_id;
+      }
     }
 
   }
