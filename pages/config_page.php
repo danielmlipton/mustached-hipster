@@ -118,3 +118,5 @@ if (config_is_set( 'plugin_ProjectBoard_' . $t_rows_id )) {
 <?php
 
 html_page_bottom();
+
+?>

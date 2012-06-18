@@ -8,10 +8,7 @@ class ProjectBoardPlugin extends MantisPlugin {
 
     $this->name = plugin_lang_get("title");
     $this->description = plugin_lang_get("description");
-
-    # Not currently used.
     $this->page = "config_page";
-
     $this->version = "0.1";
     $this->requires = array(
 
@@ -22,7 +19,7 @@ class ProjectBoardPlugin extends MantisPlugin {
       "jQueryUI" => "1.8.14",
     );
 
-    # TODO - Do we need to keep this?
+    # TODO - Do we need to keep this?  What's the value of keeping this?
     $this->uses = array(
       "Source" => "0.16",
     );
@@ -38,7 +35,9 @@ class ProjectBoardPlugin extends MantisPlugin {
     return array(
 
       /*
-       * The following numerical values are the default values from: $g_severity_enum_string
+       * The following numerical values are the default values from:
+       *   $g_severity_enum_string
+       *
        *   10 => feature
        *   20 => trivial
        *   30 => text
@@ -84,13 +83,7 @@ class ProjectBoardPlugin extends MantisPlugin {
         90 => "gray",
       ),
 
-      # TODO - Find a better way to do this.
-      # I don't like this way of determining iteration length.  Iterations
-      # can vary per iteration.  Changing this means changing the data
-      # historically.
-
-      # One option would be to store iteration length in the configuration
-      # table in mantis per target version.
+      # TODO - https://github.com/danielmlipton/mustached-hipster/issues/10
 
       # In days.
       "iteration_length" => 30,
@@ -102,7 +95,8 @@ class ProjectBoardPlugin extends MantisPlugin {
   public function hooks() {
 
     return array(
-      'EVENT_MENU_MAIN' => "menu",
+      'EVENT_MENU_MAIN'        => "menu",
+      'EVENT_LAYOUT_RESOURCES' => 'resources',
     );
 
   }
@@ -113,6 +107,22 @@ class ProjectBoardPlugin extends MantisPlugin {
     $links[] = '<a href="' . plugin_page("board") . '">' . plugin_lang_get("board") . '</a>';
 
     return $links;
+
+  }
+
+  function resources( $p_event ) {
+
+    # This is pretty ugly.  There has to be a better way to do this.
+    return '<link rel="stylesheet" type="text/css" href="' .
+      plugin_file("pbboard.css") . '" />' .
+      '<script type="text/javascript">' .
+      'var g_token_name  = \'plugin_ProjectBoard_ajax_update_token\';' .
+      'var g_token_value = \'' .
+      form_security_token( "plugin_ProjectBoard_ajax_update" ) . '\';' .
+      'var g_page = \'' . plugin_page( "ajax_update" ) . '\';' .
+      'var g_current_column, g_current_row;</script>' .
+      '<script type="text/javascript" src="' . plugin_file( 'pbboard.js' ) .
+      '"></script>';
 
   }
 

@@ -11,7 +11,11 @@ jQuery(function() {
     items: '.portlet',
     stop: function( event, ui) {
 
-      // This is a hack to update the current column .data.
+      /*
+       * This is a hack to update the current column .data because the stop()
+       * event blocks the mouseenter() event.
+       */
+   
       ui.item.trigger( jQuery.Event("mouseenter") );
 
       var t_portlet    = ui.item.find( '.save' ).data( 'portlet' );
@@ -19,6 +23,8 @@ jQuery(function() {
 
       if (t_table_info.current_column != t_portlet.current_column_name ||
           t_table_info.current_row     != t_portlet.current_row_name) {
+
+        // I'm not a huge fan of how this looks.
         ui.item.find( 'input[name="button"]' )
           .removeClass( 'button-saved' )
           .addClass( 'button-not-saved' );
@@ -51,6 +57,8 @@ jQuery(function() {
       url: g_page,
       data: data,
       dataType: 'json',
+
+      // This is particularly useful for debugging ajax calls.
       error: function( xhr, status, error ) {
         console.log( error )
       },
@@ -72,6 +80,11 @@ jQuery(function() {
       .end()
     .find( ".portlet-content" );
 
+  /*
+   * Would it make sense to start the board with the portlet minimized?
+   * This would probably require different information in the header to
+   * maintain utility.
+   */
   jQuery( ".portlet-header .ui-icon" ).click(function() {
     jQuery( this ).toggleClass( "ui-icon-minusthick" )
       .toggleClass( "ui-icon-plusthick" );

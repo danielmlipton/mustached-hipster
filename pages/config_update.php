@@ -14,4 +14,5 @@ plugin_config_set(
 );
 
 form_security_purge( 'plugin_ProjectBoard_config_update' );
+
 print_successful_redirect( plugin_page( 'board', true ) );

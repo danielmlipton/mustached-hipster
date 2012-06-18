@@ -1,28 +1,11 @@
 <?php
 
-# Copyright (c) 2011 John Reese
-
 require_once( "icon_api.php");
 require_once( "PB.class.php" );
 
-
-# Display the page.
 html_page_top(plugin_lang_get("board"));
 
 ?>
-
-<!-- Begin HTML -->
-
-<link rel="stylesheet" type="text/css" href="<?php echo plugin_file("pbboard.css") ?>"/>
-
-<script type="text/javascript">
-  var g_token_name  = 'plugin_ProjectBoard_ajax_update_token';
-  var g_token_value = '<?php echo form_security_token( "plugin_ProjectBoard_ajax_update" ) ?>';
-  var g_page = '<?php echo plugin_page( "ajax_update" ) ?>';
-  var g_current_column, g_current_row;
-</script>
-<script type="text/javascript" src="<?php echo plugin_file( 'pbboard.js' ) ?>">
-</script>
 
 <br />
 

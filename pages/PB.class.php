@@ -138,6 +138,7 @@ class PB {
       $t_params = array();
       $t_bug_ids = array();
 
+      # There has to be a better way to do this.
       $t_query = "SELECT b.id
                 FROM " . $this->_bug_table . " b
                   INNER JOIN " . $this->_custom_field_project_table . " p
