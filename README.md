@@ -5,6 +5,12 @@ A Mantis Bug Tracker plugin, based on John Reese's "scrum" plugin, to implement 
 
 https://github.com/mantisbt-plugins/scrum/.
 
+See the plugin in action:
+
+http://mustached-hipster.bitnamiapp.com/
+ 
+Login using the username "guest" and the password "password".
+
 This is the much preticipated [1] prequel to not yet planned repository:  _motherfucking-bike_
 
 [1] Yes, I know.  Preticipated isn't actually a word - despite the 5,690 results Google managed to find in 0.19 seconds.
