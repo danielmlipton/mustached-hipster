@@ -43,7 +43,7 @@
 
 </div>
 
-<!-- Second Row: Progress Bar -->
+<!-- Second Row: Progress Bar
 
 <div class="container">
 
@@ -81,6 +81,8 @@
   <?php endif ?>
 
 </div>
+
+-->
 
 <!-- Third Row: Issues in columns -->
 
