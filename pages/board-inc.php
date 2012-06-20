@@ -6,10 +6,11 @@
 
 <div class="container">
 
-<strong><?php echo project_get_name( $this->_project_id ) ?></strong>
+<span class="sub-header"><?php echo project_get_name( $this->_project_id ) ?></span>
 
   <form action="<?php echo plugin_page("board") ?>" method="get">
     <input type="hidden" name="page" value="ProjectBoard/board"/>
+    <span class="column-header">Target Version</span>
     <select name="target_version">
       <option value=""><?php echo plugin_lang_get("all") ?></option>
 
@@ -23,6 +24,7 @@
       <?php endforeach ?>
 
     </select>
+    <span class="column-header">Category</span>
     <select name="category">
       <option value=""><?php echo plugin_lang_get("all") ?></option>
 
@@ -132,44 +134,26 @@
           <?php print_status_icon($bug->priority) ?>
         </div>
 
-        <div class="commits" style="float: right;">
-          <?php echo $source_count[$bug->id] ?>
-        </div>
-
         <div class="category">
-          <?php if ($bug->project_id != $current_project) {
-              $project_name = project_get_name($bug->project_id);
-              echo "<span class=\"project\">{$project_name}</span> - ";
-            }
+          <?php $t_project_name = project_get_name($bug->project_id);
+            echo "<span class=\"project\">{$t_project_name}</span> - ";
             echo category_full_name($bug->category_id, false)
           ?>
 
         </div>
 
-      </div>
-
-      <div class="portlet-content">
-        <div class="summary">
-          <?php echo print_bug_link($bug->id) ?>:
-          <?php echo $bug->summary ?>
+        <div class="summary" style="font-size: 12px;">
+        <?php echo print_bug_link($bug->id) ?>:
+        <?php echo $bug->summary ?>
         </div>
 
-        <div class="handler">
-        <?php
-          echo $bug->handler_id > 0 ? user_get_name($bug->handler_id) : ""
-        ?>
-
-          <div class="severity" style="background: <?php echo $sevcolor ?>"
-            title="Severity: <?php echo get_enum_element("severity", $bug->severity) ?>">
+        <div class="container">
+          <div style="float: left; color: <?php echo get_status_color( $bug->status )?>;">
+            <?php echo string_display_line( get_enum_element( 'status', $bug->status ) ); ?>
           </div>
-
-          <div class="resolution" style="background: <?php echo $rescolor ?>"
-            title="Resolution: <?php echo get_enum_element("resolution", $bug->resolution) ?>">
-          </div>
-
           <div class="save">
 
-              <input id="<?php echo ++$t_count ?>" class="button-saved button" name="button" type="submit" value="not saved" title="Click here to save." />
+              <input id="<?php echo ++$t_count ?>" class="button-saved button" name="button" type="button" value="not saved" title="Click here to save." />
 
 <script type="text/javascript">
   jQuery( '.save, #<?php echo( $t_count ) ?>' ).data(
@@ -184,7 +168,69 @@
 
           </div> <!-- End of "save" -->
 
-        </div> <!-- End of "handler" -->
+        </div>
+
+      </div>
+
+      <div class="portlet-content">
+
+        <div class="container">
+          <div class="label">
+          Assigned To:
+          </div>
+          <div class="label-value">
+          <?php
+            echo $bug->handler_id > 0 ? user_get_name($bug->handler_id) : ""
+          ?>
+          </div>
+        </div>
+
+	<div class="container">
+          <div class="label">
+            Severity:
+          </div>
+          <div class="label-value" style="color: <?php echo $sevcolor ?>;"
+            title="Severity: <?php echo get_enum_element("severity", $bug->severity) ?>">
+            <?php echo get_enum_element("severity", $bug->severity)?>
+          </div>
+
+        </div>
+
+	<div class="container">
+          <div class="label">
+            Resolution:
+          </div>
+          <div class="label-value" style="color: <?php echo $rescolor ?>" title="Resolution: <?php echo get_enum_element("resolution", $bug->resolution) ?>">
+            <?php echo get_enum_element("resolution", $bug->resolution) ?>
+          </div>
+        </div>
+
+	<div class="container">
+          <div class="label">
+            Date Submitted:
+          </div>
+          <div class="label-value">
+            <?php echo date( config_get( 'normal_date_format' ), $bug->date_submitted ) ?>
+          </div>
+        </div>
+
+	<div class="container">
+          <div class="label">
+            Date Updated:
+          </div>
+          <div class="label-value">
+            <?php echo date( config_get( 'normal_date_format' ), $bug->last_updated ) ?>
+          </div>
+        </div>
+
+	<div class="container">
+          <div class="label">
+            # of Notes:
+          </div>
+          <div class="label-value">
+            <?php echo count( bugnote_get_all_bugnotes( $bug->id ) ) ?>
+          </div>
+        </div>
 
       </div> <!-- End of "portlet-content" -->
 

@@ -75,10 +75,10 @@ jQuery(function() {
 
   jQuery( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
     .find( ".portlet-header" )
-      .addClass( "ui-widget-header ui-corner-all" )
+      .addClass( "ui-corner-all" )
       .prepend( '<span class="ui-icon ui-icon-minusthick"></span>')
       .end()
-    .find( ".portlet-content" );
+      .find( ".portlet-content" );
 
   /*
    * Would it make sense to start the board with the portlet minimized?
@@ -86,11 +86,14 @@ jQuery(function() {
    * maintain utility.
    */
   jQuery( ".portlet-header .ui-icon" ).click(function() {
-    jQuery( this ).toggleClass( "ui-icon-minusthick" )
-      .toggleClass( "ui-icon-plusthick" );
+    jQuery( this ).toggleClass( "ui-icon-plusthick" )
+      .toggleClass( "ui-icon-minusthick" );
     jQuery( this ).parents( ".portlet:first" ).find( ".portlet-content" )
       .toggle();
   });
+
+  // This is cheating.
+  jQuery( ".portlet-header .ui-icon" ).trigger( jQuery.Event("click") );
 
   jQuery( ".column" ).disableSelection();
 
