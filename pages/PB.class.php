@@ -161,8 +161,10 @@ class PB {
 
       if (isset( $this->_category )) {
 
-        $t_query .= ' AND b.category_id = ' . db_param();
-        $t_params[] = $this->_categories[ $this->_category ];
+# The category filter does not work at the moment.
+#error_log( 'foo: ' . $this->category );
+#        $t_query .= ' AND b.category_id = ' . db_param();
+#        $t_params[] = $this->_categories[ $this->_category ];
 
       }
 
