@@ -4,10 +4,6 @@ mustached-hipster
 A Mantis Bug Tracker plugin, based on John Reese's "scrum" plugin, to implement story boards.  For the original plugin, see:
 
 https://github.com/mantisbt-plugins/scrum/.
-
-See the plugin in action:
-
-http://mustached-hipster.bitnamiapp.com/
  
 Login using the username "guest" and the password "password".
 
